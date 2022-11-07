@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  interface:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./apps/interface
+      dockerfile: Dockerfile
+    volumes:
+      - ./apps/interface:/app
+    depends_on:
+      - server
+    command: [ 'npm', 'run', 'start' ]
+    networks:
+      - my_net
+
+  server:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+      - '9229:9229'
+    volumes:
+      - ./apps/api:/app
+    depends_on:
+      - postgres
+    command: [ 'npm', 'run', 'start:dev' ]
+    env_file:
+      - ./.env
+    networks:
+      - my_net
+
+  postgres:
+    image: postgres:14.0-alpine3.14
+    ports:
+      - '7654:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    networks:
+      - my_net
+
+volumes:
+  postgres-data:
+
+
+networks:
+  my_net:
