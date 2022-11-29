@@ -33,6 +33,7 @@ jobs:
           cd ./apps/api
           npm ci
           npm run build
+      - run: mkdir public
       - uses: actions/upload-artifact@master
         with:
           name: build-project
