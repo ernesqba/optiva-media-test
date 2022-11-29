@@ -28,11 +28,29 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: |
+      - name: Install and build the app
+        run: |
           cd ./apps/api
           npm ci
           npm run build
-          npm run test:cov
+      - uses: actions/upload-artifact@master
+        with:
+          name: build-project
+          path: public/
+          
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: build-project
+          path: public/
+      - name: Run coverage test
+        run: npm run test:cov
+    
+      
+    
 
 
     
