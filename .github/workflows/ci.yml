@@ -37,7 +37,7 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: build-project
-          path: public/
+          path: ./
           
   test:
     needs: [build]
@@ -47,7 +47,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: build-project
-          path: public/
+          path: ./
       - name: Run coverage test
         run: npm run test:cov
     
